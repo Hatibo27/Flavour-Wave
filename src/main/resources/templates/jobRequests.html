@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+          <link rel="shortcut icon" href="/images/favicon.ico" />
+    <title>Hatib2Shop</title>
+       <style>
+/*
+	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	*/
+	@media
+	  only screen 
+    and (max-width: 760px), (min-device-width: 768px) 
+    and (max-device-width: 1024px)  {
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+    tr {
+      margin: 0 0 1rem 0;
+    }
+      
+    tr:nth-child(odd) {
+      background: #ccc;
+    }
+    
+		td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding-left: 50%;
+		
+		}
+
+		td:before {
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			
+			left: 12px;
+			width: 45%;
+			padding-right: 10px;
+			margin-bottom:10px;
+			margin-top:-20px;
+			white-space: nowrap;
+			
+		}
+
+		/*
+		Label the data
+    You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+		*/
+		
+		td:nth-of-type(1):before { content: "First Name" ;font-family: bold; }
+		td:nth-of-type(2):before { content: "Mail"; font-family: bold; }
+		td:nth-of-type(3):before { content: "Date Of Submit"; font-family: bold; }
+		td:nth-of-type(4):before { content: "Status"; font-family: bold; }
+		td:nth-of-type(5):before { content: "Action"; font-family: bold; }
+		
+	
+	}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <div class="container-fluid">
+<div class="logo">
+        <a class="navbar-brand" th:href="@{/}" >
+            <img th:src="@{/images/logo.png}" id="logo"  src="../static/images/logo.png" width="auto" height="100px" class="d-inline-block align-top" alt=""/>
+        </a>
+     </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/}" href="#">home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/shop}" href="#">shop</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">logout</a>
+                </li>
+         
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/orderdata}" href="#">your-order</a>
+                </li>
+                 <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/cart}" href="#">cart</a>
+                </li>
+                <li class="nav-item active">
+                    <span class="nav-link" th:text="${cartCount}">0</span>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+ 
+
+   
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">Mail</th>
+            <th scope="col">DateOfSubmit</th>
+            <th scope="col">status</th>
+             <th scope="col">Action</th>
+         
+            
+        </tr>
+        </thead>
+        
+          
+        <tbody >
+        
+        
+        <!-- th:if="${order.status == 'paid'}" -->
+        
+             
+    
+    
+       
+               <tr  th:each="job, iStat : ${jobDetails}"    >
+          
+               
+              
+             
+            <th scope="row" th:text="${iStat.index+1}">1</th>
+            <td  th:text="${job.firstName}">Larry</td>
+            <td th:text="${job.users.email}">Larry</td>
+            <td    th:text="${job.date}">Larry</td>
+            <td style="margin-top:10px; color:purple;" th:text="${job.status}" th:if="${job.status=='Pending'}">Larry</td>
+            <td  style="margin-top:10px; color:green;"  th:text="${job.status}" th:if="${job.status=='Approved'}">Larry</td>
+             <td  style="margin-top:10px;color:red;"  th:text="${job.status}+ed" th:if="${job.status=='Reject'}">Larry</td>
+            <td style="padding-top:5px"><a th:href="@{/admin/viewFullRequests/{id}(id=${job.id})}"  class="btn btn-primary">Job Details</a></td>
+</tr>
+
+       
+        </tbody>
+        
+    </table>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

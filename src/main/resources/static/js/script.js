@@ -1,0 +1,5 @@
+
+  function validateEmail(){
+
+alert("jod");
+}
